@@ -1,6 +1,10 @@
 #ifndef CUETRACK_H
 #define CUETRACK_H
-
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/objdetect.hpp>
+#include <opencv2/imgproc.hpp>
 #include<QPair>
 using namespace cv;
 
