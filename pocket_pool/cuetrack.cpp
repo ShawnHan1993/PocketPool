@@ -1,15 +1,14 @@
 #include "cuetrack.h"
 #include "game.h"
 #include <opencv2/highgui/highgui.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/videoio.hpp>
-#include <opencv2/objdetect.hpp>
-#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
+#include <vector>
 #define TOP 1
 #define LEFT 2
 #define BOTTOM 3
 #define RIGHT 4
 using namespace cv;
+using namespace std;
 extern Game * game;
 
 Cuetrack::Cuetrack()
@@ -20,25 +19,44 @@ Cuetrack::Cuetrack()
 
 }
 
-QPair<double, double> Cuetrack::startTracking(QPair<double, double> ballPos)
+QPair<double, double> Cuetrack::startTracking()
 {
 
-    double x, y;
-    x = ballPos.first;
-    y = ballPos.second;
+    //double x, y;
+    //x = ballPos.first;
+    //y = ballPos.second;
 
     // do something to compute vX, vY;
-
+    Scalar_<uint8_t> tar;
+    Mat target = imread("target.jpg");
+    VideoCapture cap;
+    if(!cap.open(0))
+        return qMakePair(0.0, 0.0);
+    Vec3b intensity = target.at<Vec3b>(10, 10);
+    tar.val[0] = intensity.val[0];
+    tar.val[1] = intensity.val[1];
+    tar.val[2] = intensity.val[2];
+    vector<Point> cur;
+    vector<Point> pre;
+    Mat cam_img;
+    Mat cam;
+    while(1){
+        Mat cam;
+        cap >> cam;
+        if (cam.empty()) break;
+        GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
+        cur = spiral_marker_detect(cam_img, tar, size_t(20), 1, pre);
+        if (cur.size() != 0)
+            rectangle(cam_img, cur[0], Point(cur[0].x + 5, cur[0].y + 5), Scalar(0, 0, 0), 2);
+        imshow("current", cam_img);
+        pre = cur;
+        if (waitKey(10) == 27) break;
+    }
     return qMakePair(vX, vY);
 }
 
 vector<Point> Cuetrack::spiral_marker_detect(Mat img, Scalar target, size_t n, int number, vector<Point> pre_vec) {
-	int counter = 1;
-	uchar tmp_R;
-	uchar tmp_G;
-	uchar tmp_B;
-	vector<Point> res;
-	int accum = 2;
+    vector<Point> res;
 	if (pre_vec.size() == 0) {
 		return detect_marker(img, target, n, number);
 	}
