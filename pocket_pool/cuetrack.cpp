@@ -3,6 +3,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <QBrush>
 #define TOP 1
 #define LEFT 2
 #define BOTTOM 3
@@ -16,6 +17,7 @@ Cuetrack::Cuetrack()
 
     vX = 0;
     vY = 0;
+
 
 }
 
@@ -41,19 +43,27 @@ QPair<double, double> Cuetrack::startTracking()
     Mat cam_img;
     Mat cam;
     while(1){
-        Mat cam;
         cap >> cam;
         if (cam.empty()) break;
         cam_img = cam;
-        //GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
+        GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
         cur = spiral_marker_detect(cam_img, tar, size_t(20), 1, pre);
-        if (cur.size() != 0)
+        if (cur.size() != 0){
             rectangle(cam_img, cur[0], Point(cur[0].x + 5, cur[0].y + 5), Scalar(0, 0, 0), 2);
+            //game->cursor->setPos(cur[0].x, cur[0].y);
+            if (sqrt( pow(cur[0].x - game->balls[0]->x(), 2) + pow(cur[0].y - game->balls[0]->y(), 2) ) < 10){
+                cap.release();
+                return qMakePair(5, 0);
+
+            }
+        }
+
         imshow("current", cam_img);
         pre = cur;
-        if (waitKey(10) == 27) break;
+        if (waitKey(33) == 27) break;
     }
-    return qMakePair(vX, vY);
+    cap.release();
+    return qMakePair(0.0, 5.0);
 }
 
 vector<Point> Cuetrack::spiral_marker_detect(Mat img, Scalar target, size_t n, int number, vector<Point> pre_vec) {
@@ -150,7 +160,7 @@ vector<Point> Cuetrack::detect_marker(Mat img, Scalar target, size_t n, int &num
 			tmp_R = target.val[2] > tmp_R ? target.val[2] - tmp_R : tmp_R - target.val[2];
 			tmp_G = target.val[1] > tmp_G ? target.val[1] - tmp_G : tmp_G - target.val[1];
 			tmp_B = target.val[0] > tmp_B ? target.val[0] - tmp_B : tmp_B - target.val[0];
-			if ((tmp_R > target.val[2] * 0.7) || (tmp_G > target.val[1] * 0.2) || (tmp_B > target.val[0] * 0.2)) {
+            if ((tmp_R > target.val[2] * 0.7) || (tmp_G > target.val[1] * 0.2) || (tmp_B > target.val[0] * 0.2)) {
 				if (accum > 0)
 					accum--;
 				continue;

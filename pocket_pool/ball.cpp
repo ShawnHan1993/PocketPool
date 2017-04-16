@@ -28,6 +28,7 @@ Ball::Ball(int num)
     for (int i = 0; i < 11; i++){
         colliding[i] = 0;
     }
+    stop = 0;
 }
 
 
@@ -139,6 +140,7 @@ void Ball::move()
     {
         vX = 0;
         vY = 0;
+        stop = 1;
     }
 }
 

@@ -1,8 +1,11 @@
 #include "game.h"
-
+#include <QPair>
+#include <QBrush>
+#include <QDebug>
 
 Game::Game()
 {
+    //tracker = new Cuetrack();
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,480,272);
     scene->setBackgroundBrush(QBrush(Qt::green));
@@ -10,29 +13,59 @@ Game::Game()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //setFixedSize(480,272);
-
+    //cursor = new QGraphicsRectItem();
+    //cursor->setRect(0,0,3,3);
+    //cursor->setBrush(QBrush(Qt::blue));
+    //cursor->setPos(200,200);
+    //scene->addItem(cursor);
+    //scene->removeItem(cursor);
+    state = 0;
     // Set the table
     table = new Table();
     table->setPos(0, 25);
     scene->addItem(table);
 
-
     // Set Balls
     balls.resize(11);
-    resetBalls();
-    balls[0]->setState(0, 5);
+
+
+
 
     timer = new QTimer(this);
-    timer->start(500);
+
     connect(timer, SIGNAL(timeout()),
-            this, SLOT(ballMoveHandler()));
+            this, SLOT(gameLogic()));
+    timer->start(50);
 
 
 }
 
 void Game::gameLogic()
 {
-    // do something
+    if (state == 0){
+        timer->stop();
+        qDebug()<<"hello";
+        resetBalls();
+        state = 1;
+        timer->start(50);
+        return;
+    }
+    else if (state == 1){
+        //scene->addItem(cursor);
+        timer->stop();
+        QPair<double, double> tmp = tracker.startTracking();
+        //scene->removeItem(cursor);
+        for (int i = 0; i < balls.size(); i++)
+            balls[i]->stop = 0;
+        balls[0]->setState(tmp.first, tmp.second);
+        state = 2;
+        timer->start(50);
+        return;
+    }
+    else if (state == 2){
+        ballMoveHandler();
+    return;
+    }
 }
 
 void Game::scoreChangeHandler(int ballNumber)
@@ -42,9 +75,15 @@ void Game::scoreChangeHandler(int ballNumber)
 
 void Game::ballMoveHandler()
 {
+    int tmp;
     for (int i = 0; i < balls.size(); i++){
         balls[i]->move();
     }
+    for (int i = 0; i < balls.size(); i++){
+        tmp += balls[i]->stop;
+    }
+    if (tmp == balls.size())
+        state = 1;
 }
 
 void Game::resetBalls()

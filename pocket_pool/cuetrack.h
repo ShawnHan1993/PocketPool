@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <QPair>
 #include <vector>
+
 using namespace cv;
 using namespace std;
 class Cuetrack

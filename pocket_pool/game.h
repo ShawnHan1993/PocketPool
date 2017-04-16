@@ -4,10 +4,12 @@
 #include <QGraphicsView>
 #include "ball.h"
 #include "table.h"
+#include "cuetrack.h"
 #include <QVector>
 #include <QTimer>
 #include <QObject>
 #include <QList>
+#include <QGraphicsRectItem>
 #include <QPair>
 
 
@@ -17,17 +19,20 @@ class Game : public QGraphicsView
 public:
     Game();
     QGraphicsScene * scene;
+    QGraphicsRectItem * cursor;
     QVector<Ball*> balls;
     //QVector<pockets*> pocket;
+    Cuetrack tracker;
     QList<QPair<int, int>> position;
     Table *table;
+    int state;
 private:
     QTimer * timer;
     void resetBalls();
-    void gameLogic();
+    void ballMoveHandler();
     void scoreChangeHandler(int ballNumber);
 private slots:
-    void ballMoveHandler();
+    void gameLogic();
 };
 
 #endif // GAME_H

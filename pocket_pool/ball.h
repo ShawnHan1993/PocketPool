@@ -21,6 +21,7 @@ public:
     int timerState;
     QVector<double> colliding;
     void move();
+    int stop;
 private:
     double getRad(double x, double y);
     double getAbs(double x);
