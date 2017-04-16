@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../pocket_pool -I. -I../../Qt5.8.0/5.8/gcc_64/include -I../../Qt5.8.0/5.8/gcc_64/include/QtWidgets -I../../Qt5.8.0/5.8/gcc_64/include/QtGui -I../../Qt5.8.0/5.8/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../pocket_pool -I. -isystem /usr/local/include/opencv -isystem /usr/local/include -I../../Qt5.8.0/5.8/gcc_64/include -I../../Qt5.8.0/5.8/gcc_64/include/QtWidgets -I../../Qt5.8.0/5.8/gcc_64/include/QtGui -I../../Qt5.8.0/5.8/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/shawn/Qt5.8.0/5.8/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = pocket_pool1.0.0
 DISTDIR = /home/shawn/PocketPool/pocket_pool_build/.tmp/pocket_pool1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/shawn/Qt5.8.0/5.8/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/shawn/Qt5.8.0/5.8/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_video -lopencv_photo -lopencv_ml -lopencv_imgproc -lopencv_flann -lopencv_viz -lopencv_core -L/home/shawn/Qt5.8.0/5.8/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -221,6 +221,7 @@ DIST          = ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/default_pre.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/resolve_config.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/default_post.prf \
+		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/link_pkgconfig.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qml_debug.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/warn_on.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qt.prf \
@@ -414,6 +415,7 @@ Makefile: ../pocket_pool/pocket_pool.pro ../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/default_pre.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/resolve_config.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/default_post.prf \
+		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/link_pkgconfig.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qml_debug.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/warn_on.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qt.prf \
@@ -590,6 +592,7 @@ Makefile: ../pocket_pool/pocket_pool.pro ../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/default_pre.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/resolve_config.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/default_post.prf:
+../../Qt5.8.0/5.8/gcc_64/mkspecs/features/link_pkgconfig.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qml_debug.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/warn_on.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qt.prf:
@@ -792,7 +795,7 @@ moc_game.cpp: ../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsView \
 		../pocket_pool/game.h \
 		moc_predefs.h \
 		../../Qt5.8.0/5.8/gcc_64/bin/moc
-	/home/shawn/Qt5.8.0/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/shawn/Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++ -I/home/shawn/PocketPool/pocket_pool -I/home/shawn/Qt5.8.0/5.8/gcc_64/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtWidgets -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtGui -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../pocket_pool/game.h -o moc_game.cpp
+	/home/shawn/Qt5.8.0/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/shawn/Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++ -I/home/shawn/PocketPool/pocket_pool -I/usr/local/include/opencv -I/usr/local/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtWidgets -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtGui -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../pocket_pool/game.h -o moc_game.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -936,7 +939,8 @@ main.o: ../pocket_pool/main.cpp ../pocket_pool/game.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qeventloop.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qguiapplication.h \
-		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qinputmethod.h
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qinputmethod.h \
+		../pocket_pool/cuetrack.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../pocket_pool/main.cpp
 
 game.o: ../pocket_pool/game.cpp ../pocket_pool/game.h \

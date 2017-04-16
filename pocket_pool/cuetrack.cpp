@@ -44,7 +44,8 @@ QPair<double, double> Cuetrack::startTracking()
         Mat cam;
         cap >> cam;
         if (cam.empty()) break;
-        GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
+        cam_img = cam;
+        //GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
         cur = spiral_marker_detect(cam_img, tar, size_t(20), 1, pre);
         if (cur.size() != 0)
             rectangle(cam_img, cur[0], Point(cur[0].x + 5, cur[0].y + 5), Scalar(0, 0, 0), 2);
