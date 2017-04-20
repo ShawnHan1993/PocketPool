@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     cuetrack.cpp \
     score.cpp \
     ball.cpp \
-    pocket.cpp
+    pocket.cpp \
+    holes.cpp
 
 HEADERS  += \
     game.h \
@@ -37,7 +38,8 @@ HEADERS  += \
     cuetrack.h \
     score.h \
     ball.h \
-    pocket.h
+    pocket.h \
+    holes.h
 
 FORMS    +=
 

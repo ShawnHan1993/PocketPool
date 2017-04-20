@@ -4,6 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <QBrush>
+#include <QDebug>
+#include <QThread>
 #define TOP 1
 #define LEFT 2
 #define BOTTOM 3
@@ -14,56 +16,60 @@ extern Game * game;
 
 Cuetrack::Cuetrack()
 {
-
+    timer = new QTimer(this);
+    detecting = 0;
     vX = 0;
     vY = 0;
-
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
 
 }
 
-QPair<double, double> Cuetrack::startTracking()
+
+
+void Cuetrack::timerHandler()
 {
-
-    //double x, y;
-    //x = ballPos.first;
-    //y = ballPos.second;
-
-    // do something to compute vX, vY;
-    Scalar_<uint8_t> tar;
-    Mat target = imread("target.jpg");
-    VideoCapture cap;
-    if(!cap.open(0))
-        return qMakePair(0.0, 0.0);
-    Vec3b intensity = target.at<Vec3b>(10, 10);
-    tar.val[0] = intensity.val[0];
-    tar.val[1] = intensity.val[1];
-    tar.val[2] = intensity.val[2];
-    vector<Point> cur;
-    vector<Point> pre;
-    Mat cam_img;
-    Mat cam;
-    while(1){
+    timer->stop();
+    //qDebug()<<"timer handler in";
         cap >> cam;
-        if (cam.empty()) break;
+        if (cam.empty()){
+            //timer->start(33);
+            qDebug()<<"cam is cmpty";
+            return;
+        }
         cam_img = cam;
         GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
         cur = spiral_marker_detect(cam_img, tar, size_t(20), 1, pre);
         if (cur.size() != 0){
+            game->cursor->setPos(cur[0].x, cur[0].y);
             rectangle(cam_img, cur[0], Point(cur[0].x + 5, cur[0].y + 5), Scalar(0, 0, 0), 2);
-            //game->cursor->setPos(cur[0].x, cur[0].y);
-            if (sqrt( pow(cur[0].x - game->balls[0]->x(), 2) + pow(cur[0].y - game->balls[0]->y(), 2) ) < 10){
+            if (sqrt( pow(cur[0].x - game->balls[0]->x(), 2) + pow(cur[0].y - game->balls[0]->y(), 2) ) < 20){
+                hitValue = qMakePair(5, 1);
                 cap.release();
-                return qMakePair(5, 0);
-
+                detecting = 2;
+                timer->stop();
+                destroyAllWindows();
+                return;
             }
         }
-
-        imshow("current", cam_img);
         pre = cur;
-        if (waitKey(33) == 27) break;
+        imshow("current", cam_img);
+        timer->start(33);
     }
-    cap.release();
-    return qMakePair(0.0, 5.0);
+
+
+
+void Cuetrack::startTracking()
+{
+    target = imread("target.jpg");
+    if(!cap.open(0)){
+        qDebug()<<"Camera cannot be opened";
+        return;
+    }
+    intensity = target.at<Vec3b>(10, 10);
+    tar.val[0] = intensity.val[0];
+    tar.val[1] = intensity.val[1];
+    tar.val[2] = intensity.val[2];
+    timer->start(33);
 }
 
 vector<Point> Cuetrack::spiral_marker_detect(Mat img, Scalar target, size_t n, int number, vector<Point> pre_vec) {
@@ -185,8 +191,10 @@ vector<Point> Cuetrack::predict_marker(vector<Point> pre, vector<Point> cur) {
 	if (pre.size() == 0)
 		return cur;
 	res.push_back(Point((cur[0].x + pre[0].x)/2, (cur[0].y + pre[0].y) / 2));
-	return res;
+    return res;
 }
+
+
 
 bool Cuetrack::filter(Point *start, Point *end, int m, int n, int Type){
 	switch (Type)
