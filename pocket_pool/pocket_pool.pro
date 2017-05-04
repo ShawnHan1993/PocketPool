@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT       += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = pocket_pool
@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     ball.cpp \
     pocket.cpp \
     holes.cpp \
-    button.cpp
+    button.cpp \
+    mytcpsocket.cpp
 
 HEADERS  += \
     game.h \
@@ -41,7 +42,8 @@ HEADERS  += \
     ball.h \
     pocket.h \
     holes.h \
-    button.h
+    button.h \
+    mytcpsocket.h
 
 FORMS    +=
 

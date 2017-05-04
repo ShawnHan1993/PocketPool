@@ -3,10 +3,11 @@
 
 #include <QGraphicsView>
 #include "ball.h"
+#include "mytcpsocket.h"
 #include "table.h"
 #include "holes.h"
 #include "cuetrack.h"
-#include "Button.h"
+#include "button.h"
 #include "pocket.h"
 #include "score.h"
 #include <QVector>
@@ -44,6 +45,7 @@ public:
     int winner;
     bool judgement(int user1_2);
     int reset;
+    MyTcpSocket * s;
 private:
     QTimer * timer;
     QTimer * timer1;
@@ -52,7 +54,7 @@ private:
     void resetBalls();
     void ballMoveHandler();
     void scoreChangeHandler(int ballNumber);
-    void drawPanel(int x, int y, int width, int height, QColor color, double opacity);
+    void design(int x, int y, int width, int height, QColor color, double opacity);
     //void startgame();
     //void resetgames();
 private slots:

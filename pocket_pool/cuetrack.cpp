@@ -18,11 +18,11 @@ Cuetrack::Cuetrack()
 
 void Cuetrack::startTracking()
 {
-    int max = 20;
+    /*int max = 20;
     int min = 10;
     double v = rand() % (max-min+1)+min;
     double y = rand() % (21) -10 ;
-    hitValue = qMakePair(v, y);
+    hitValue = qMakePair(v, y);*/
     detecting = 2;
     return;
 }
