@@ -1,3 +1,4 @@
 ./pocket_pool_build/*
 ./pocket_pool_release/*
 ./pocket_pool/pocket_pool.pro.user
+*.opendb
