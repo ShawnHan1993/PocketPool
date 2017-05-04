@@ -243,11 +243,4 @@ bool Cuetrack::filter(Point *start, Point *end, int m, int n, int Type){
 		return false;
 	}
 	return true;
-    int max = 20;
-    int min = 10;
-    double v = rand() % (max-min+1)+min;
-    double y = rand() % (21) -10 ;
-    hitValue = qMakePair(v, y);
-    detecting = 2;
-    return;
 }

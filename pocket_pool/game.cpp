@@ -27,6 +27,7 @@ Game::Game()
     table = new Table();
     table->setPos(0, 25);
     scene->addItem(table);
+    s = new MyTcpSocket;
 
     // set Holes
     holes.resize(6);
@@ -79,22 +80,39 @@ void Game::gameLogic()
         winner = 0;
         //balls[0]->setState(5,0);
         state = 1;
-        timer->start();
+        timer->start(50);
         return;
     }
     else if (state == 1){
-        scene->addItem(cursor);
-        timer->stop();
-        QPair<double, double> tmp = tracker.startTracking();
-        //scene->removeItem(cursor);
-        for (int i = 0; i < balls.size(); i++)
-            balls[i]->stop = 0;
-        balls[0]->setState(tmp.first, tmp.second);
-        state = 2;
-        timer->start(50);
-        scene->removeItem(cursor);
-        return;
-    }
+        if (tracker.detecting == 0){
+            timer->stop();
+            s->doConnect();
+            //s->connected();
+            scene->addItem(cursor);
+            //s->socket->waitForReadyRead(3000);
+            tracker.detecting = 1;
+            timer->start(50);
+            return;
+        }
+        else if (tracker.detecting == 1){
+            return;
+        }
+        else if(tracker.detecting == 2){
+            timer->stop();
+                scene->removeItem(cursor);
+                for (int i = 0; i < balls.size(); i++)
+                    if (balls[i]->inPocket == 0)
+                        balls[i]->stop = 0;
+                tracker.detecting = 0;
+                balls[0]->setState(tracker.hitValue.first, tracker.hitValue.second);
+
+                qDebug()<<"start moving balls";
+                state = 2;
+                timer->start(50);
+            }
+            return;
+        }
+
     else if (state == 2){
         ballMoveHandler();
 
@@ -221,7 +239,7 @@ void Game::gameover(){
     //drawPanel(0,0,482,272,Qt::black,0.65);
 
         // draw panel
-    drawPanel(0,0,482,272,Qt::black,0.5);
+    design(0,0,482,272,Qt::black,0.75);
         // create playAgain button
 
     playAgain = new Button(QString("Replay"));
@@ -248,7 +266,7 @@ void Game::gameover(){
 
 }
 
-void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity){
+void Game::design(int x, int y, int width, int height, QColor color, double opacity){
     // draws a panel at the specified location with the specified properties
     panel = new QGraphicsRectItem(x,y,width,height);
     QBrush brush;
