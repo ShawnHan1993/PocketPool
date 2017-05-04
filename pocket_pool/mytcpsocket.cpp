@@ -67,8 +67,8 @@ void MyTcpSocket::readyRead()
     qDebug() << "reading...";
 
     QString tcpzuobiao;
-    tcpzuobiao = socket->readAll();
-    qDebug() << tcpzuobiao;
+    tcpzuobiao = socket->readAll();//read data from socket
+    qDebug() << "Received data:" << tcpzuobiao;
     if(tcpzuobiao.length() != 0){
         int x;
         int y;
@@ -77,8 +77,8 @@ void MyTcpSocket::readyRead()
         game->cursor->setPos(x,y);
         if(tcpzuobiao.split(" ")[2].toDouble()!=0.0 ||tcpzuobiao.split(" ")[3].toDouble()!=0.0){
 
-            game->tracker.hitValue.first = tcpzuobiao.split(" ")[2].toDouble();
-            game->tracker.hitValue.second = tcpzuobiao.split(" ")[3].toDouble();
+            game->tracker.hitValue.first = tcpzuobiao.split(" ")[2].toDouble() - 20.0;
+            game->tracker.hitValue.second = tcpzuobiao.split(" ")[3].toDouble() - 20.0;
             game->tracker.startTracking();
             hasvalue = true;
         }

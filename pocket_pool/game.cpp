@@ -26,7 +26,7 @@ Game::Game()
     // Set the table
     table = new Table();
     table->setPos(0, 25);
-    scene->addItem(table);
+
     s = new MyTcpSocket;
 
     // set Holes
@@ -44,7 +44,7 @@ Game::Game()
         pockets[i] = new Pocket(i);
         scene->addItem(pockets[i]);
     }
-
+    scene->addItem(table);
     score = new Score();
     scene->addItem(score);
 
@@ -112,6 +112,7 @@ void Game::gameLogic()
             }
             return;
         }
+
 
     else if (state == 2){
         ballMoveHandler();
