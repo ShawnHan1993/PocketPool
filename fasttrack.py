@@ -27,8 +27,8 @@ while 1:
         cur_x = int((max_x + min_x) / 2)
         cur_y = int((max_y + min_y) / 2)
         period = int(round(time.time() * 1000)) - pre_time
-        vx = (cur_x - pre_x) * 50 / period
-        vy = (cur_y - pre_y) * 50 / period
+        vx = round((cur_x - pre_x) * 50 / period)
+        vy = round((cur_y - pre_y) * 50 / period)
         pre_x = cur_x
         pre_y = cur_y
         cv2.rectangle(frame, (cur_y, cur_x), (cur_y + 3,cur_x + 3), (0,255,0),3)
