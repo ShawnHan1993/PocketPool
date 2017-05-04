@@ -13,11 +13,11 @@ Game::Game()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //setFixedSize(480,272);
-    //cursor = new QGraphicsRectItem();
-    //cursor->setRect(0,0,3,3);
-    //cursor->setBrush(QBrush(Qt::blue));
-    //cursor->setPos(200,200);
-    //scene->addItem(cursor);
+    cursor = new QGraphicsRectItem();
+    cursor->setRect(0,0,3,3);
+    cursor->setBrush(QBrush(Qt::blue));
+    cursor->setPos(200,200);
+
     //scene->removeItem(cursor);
     state = 0;
     // Set the table
@@ -51,7 +51,7 @@ void Game::gameLogic()
         return;
     }
     else if (state == 1){
-        //scene->addItem(cursor);
+        scene->addItem(cursor);
         timer->stop();
         QPair<double, double> tmp = tracker.startTracking();
         //scene->removeItem(cursor);
@@ -60,6 +60,7 @@ void Game::gameLogic()
         balls[0]->setState(tmp.first, tmp.second);
         state = 2;
         timer->start(50);
+        scene->removeItem(cursor);
         return;
     }
     else if (state == 2){

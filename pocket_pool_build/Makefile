@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_TESTLIB_LIB -DQT_CORE_LIB -DQT_TESTCASE_BUILDDIR='"/home/shawn/PocketPool/pocket_pool_build"'
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../pocket_pool -I. -isystem /usr/local/include/opencv -isystem /usr/local/include -I../../Qt5.8.0/5.8/gcc_64/include -I../../Qt5.8.0/5.8/gcc_64/include/QtWidgets -I../../Qt5.8.0/5.8/gcc_64/include/QtGui -I../../Qt5.8.0/5.8/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../pocket_pool -I. -isystem /usr/local/include/opencv -isystem /usr/local/include -I../../Qt5.8.0/5.8/gcc_64/include -I../../Qt5.8.0/5.8/gcc_64/include/QtWidgets -I../../Qt5.8.0/5.8/gcc_64/include/QtGui -I../../Qt5.8.0/5.8/gcc_64/include/QtTest -I../../Qt5.8.0/5.8/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/shawn/Qt5.8.0/5.8/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = pocket_pool1.0.0
 DISTDIR = /home/shawn/PocketPool/pocket_pool_build/.tmp/pocket_pool1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/shawn/Qt5.8.0/5.8/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_video -lopencv_photo -lopencv_ml -lopencv_imgproc -lopencv_flann -lopencv_viz -lopencv_core -L/home/shawn/Qt5.8.0/5.8/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_video -lopencv_photo -lopencv_ml -lopencv_imgproc -lopencv_flann -lopencv_viz -lopencv_core -L/home/shawn/Qt5.8.0/5.8/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Test -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -227,6 +227,7 @@ DIST          = ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qt.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/resources.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/moc.prf \
+		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/testlib_defines.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/unix/opengl.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/uic.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/unix/thread.prf \
@@ -421,6 +422,7 @@ Makefile: ../pocket_pool/pocket_pool.pro ../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qt.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/resources.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/moc.prf \
+		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/testlib_defines.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/unix/opengl.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/uic.prf \
 		../../Qt5.8.0/5.8/gcc_64/mkspecs/features/unix/thread.prf \
@@ -434,6 +436,7 @@ Makefile: ../pocket_pool/pocket_pool.pro ../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-
 		../pocket_pool/res.qrc \
 		../../Qt5.8.0/5.8/gcc_64/lib/libQt5Widgets.prl \
 		../../Qt5.8.0/5.8/gcc_64/lib/libQt5Gui.prl \
+		../../Qt5.8.0/5.8/gcc_64/lib/libQt5Test.prl \
 		../../Qt5.8.0/5.8/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -o Makefile ../pocket_pool/pocket_pool.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/spec_pre.prf:
@@ -598,6 +601,7 @@ Makefile: ../pocket_pool/pocket_pool.pro ../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/qt.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/resources.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/moc.prf:
+../../Qt5.8.0/5.8/gcc_64/mkspecs/features/testlib_defines.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/unix/opengl.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/uic.prf:
 ../../Qt5.8.0/5.8/gcc_64/mkspecs/features/unix/thread.prf:
@@ -611,6 +615,7 @@ Makefile: ../pocket_pool/pocket_pool.pro ../../Qt5.8.0/5.8/gcc_64/mkspecs/linux-
 ../pocket_pool/res.qrc:
 ../../Qt5.8.0/5.8/gcc_64/lib/libQt5Widgets.prl:
 ../../Qt5.8.0/5.8/gcc_64/lib/libQt5Gui.prl:
+../../Qt5.8.0/5.8/gcc_64/lib/libQt5Test.prl:
 ../../Qt5.8.0/5.8/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../pocket_pool/pocket_pool.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
@@ -790,12 +795,14 @@ moc_game.cpp: ../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsView \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QList \
 		../pocket_pool/table.h \
-		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../pocket_pool/cuetrack.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QPair \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsRectItem \
 		../pocket_pool/game.h \
 		moc_predefs.h \
 		../../Qt5.8.0/5.8/gcc_64/bin/moc
-	/home/shawn/Qt5.8.0/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/shawn/Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++ -I/home/shawn/PocketPool/pocket_pool -I/usr/local/include/opencv -I/usr/local/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtWidgets -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtGui -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../pocket_pool/game.h -o moc_game.cpp
+	/home/shawn/Qt5.8.0/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/shawn/Qt5.8.0/5.8/gcc_64/mkspecs/linux-g++ -I/home/shawn/PocketPool/pocket_pool -I/usr/local/include/opencv -I/usr/local/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtWidgets -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtGui -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtTest -I/home/shawn/Qt5.8.0/5.8/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../pocket_pool/game.h -o moc_game.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -931,16 +938,17 @@ main.o: ../pocket_pool/main.cpp ../pocket_pool/game.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QList \
 		../pocket_pool/table.h \
-		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../pocket_pool/cuetrack.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QPair \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsRectItem \
 		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QApplication \
 		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qcoreapplication.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qeventloop.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qguiapplication.h \
-		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qinputmethod.h \
-		../pocket_pool/cuetrack.h
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qinputmethod.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../pocket_pool/main.cpp
 
 game.o: ../pocket_pool/game.cpp ../pocket_pool/game.h \
@@ -1063,8 +1071,12 @@ game.o: ../pocket_pool/game.cpp ../pocket_pool/game.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QList \
 		../pocket_pool/table.h \
+		../pocket_pool/cuetrack.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QPair \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
-		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QPair
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsRectItem \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QBrush \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../pocket_pool/game.cpp
 
 table.o: ../pocket_pool/table.cpp ../pocket_pool/table.h \
@@ -1279,7 +1291,83 @@ cuetrack.o: ../pocket_pool/cuetrack.cpp ../pocket_pool/cuetrack.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QList \
 		../pocket_pool/table.h \
-		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsRectItem \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QBrush \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QDebug \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/QTest \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtest.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtest_global.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestcase.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qmetaobject.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qtemporarydir.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qdir.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qfileinfo.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestdata.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qbenchmark.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qbenchmarkmetric.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qdatetime.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestsystem.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qcoreapplication.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qeventloop.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/QWindow \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qwindow.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QEvent \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QMargins \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QRect \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qsurface.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qicon.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QWidget \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtest_network.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QHostAddress \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QNetworkCookie \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qnetworkcookie.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QSharedDataPointer \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QList \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QMetaType \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QNetworkReply \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QIODevice \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QString \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVariant \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QUrl \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qsslerror.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qcryptographichash.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qssl.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QFlags \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		../../Qt5.8.0/5.8/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtest_widgets.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtest_gui.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestassert.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestevent.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestkeyboard.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestspontaneevent.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/qpointer.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qguiapplication.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qinputmethod.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/qapplication.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtestmouse.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtTest/qtesttouch.h \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QSizePolicy \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QMetaEnum
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cuetrack.o ../pocket_pool/cuetrack.cpp
 
 score.o: ../pocket_pool/score.cpp ../pocket_pool/score.h
@@ -1405,8 +1493,10 @@ ball.o: ../pocket_pool/ball.cpp ../pocket_pool/ball.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtGui/qcursor.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/qgraphicsscene.h \
 		../pocket_pool/table.h \
-		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../pocket_pool/cuetrack.h \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QPair \
+		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QVector \
+		../../Qt5.8.0/5.8/gcc_64/include/QtWidgets/QGraphicsRectItem \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QDebug \
 		../../Qt5.8.0/5.8/gcc_64/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ball.o ../pocket_pool/ball.cpp
