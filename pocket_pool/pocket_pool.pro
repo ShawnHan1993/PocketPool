@@ -29,7 +29,9 @@ SOURCES += main.cpp \
     cuetrack.cpp \
     score.cpp \
     ball.cpp \
-    pocket.cpp
+    pocket.cpp \
+    holes.cpp \
+    button.cpp
 
 HEADERS  += \
     game.h \
@@ -37,13 +39,11 @@ HEADERS  += \
     cuetrack.h \
     score.h \
     ball.h \
-    pocket.h
+    pocket.h \
+    holes.h \
+    button.h
 
 FORMS    +=
 
 RESOURCES += \
     res.qrc
-
-QT_CONFIG -= no-pkg-config
-CONFIG  += link_pkgconfig
-PKGCONFIG += opencv
