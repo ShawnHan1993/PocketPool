@@ -4,17 +4,17 @@ D:\work\openCV\opencv\build\include\opencv2/core/persistence.hpp : warning C4819
 D:\work\openCV\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
 D:\work\openCV\opencv\build\include\opencv2/core/utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
 D:\work\openCV\opencv\build\include\opencv2/imgproc.hpp(592): warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-Source.cpp(68): warning C4101: 'tmp_B': unreferenced local variable
-Source.cpp(66): warning C4101: 'tmp_R': unreferenced local variable
-Source.cpp(67): warning C4101: 'tmp_G': unreferenced local variable
-Source.cpp(191): warning C4244: '=': conversion from 'double' to 'uchar', possible loss of data
-Source.cpp(192): warning C4244: '=': conversion from 'double' to 'uchar', possible loss of data
-Source.cpp(193): warning C4244: '=': conversion from 'double' to 'uchar', possible loss of data
-Source.cpp(202): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+Source.cpp(90): warning C4101: 'tmp_B': unreferenced local variable
+Source.cpp(88): warning C4101: 'tmp_R': unreferenced local variable
+Source.cpp(89): warning C4101: 'tmp_G': unreferenced local variable
+Source.cpp(213): warning C4244: '=': conversion from 'double' to 'uchar', possible loss of data
+Source.cpp(214): warning C4244: '=': conversion from 'double' to 'uchar', possible loss of data
+Source.cpp(215): warning C4244: '=': conversion from 'double' to 'uchar', possible loss of data
+Source.cpp(224): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   Generating code
-  48 of 171 functions (28.1%) were compiled, the rest were copied from previous compilation.
+  12 of 79 functions (15.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   cue_track_VS.vcxproj -> D:\work\17spring_Semester\EC535\PocketPool\cue_track\cue_track_VS\x64\Release\cue_track_VS.exe
   cue_track_VS.vcxproj -> D:\work\17spring_Semester\EC535\PocketPool\cue_track\cue_track_VS\x64\Release\cue_track_VS.pdb (Full PDB)

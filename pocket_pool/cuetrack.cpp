@@ -1,19 +1,16 @@
 #include "cuetrack.h"
 #include "game.h"
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/opencv.hpp>
 #include <vector>
 #include <QBrush>
 #include <QDebug>
 #include <unistd.h>
 #include <QtTest/QTest>
-
+#include "stdlib.h"
 #define TOP 1
 #define LEFT 2
 #define BOTTOM 3
 #define RIGHT 4
-using namespace cv;
-using namespace std;
+
 extern Game * game;
 
 Cuetrack::Cuetrack()
@@ -24,10 +21,10 @@ Cuetrack::Cuetrack()
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
-
+    detecting = 0;
 }
 
-QPair<double, double> Cuetrack::startTracking()
+void Cuetrack::startTracking()
 {
 
     //double x, y;
@@ -246,4 +243,11 @@ bool Cuetrack::filter(Point *start, Point *end, int m, int n, int Type){
 		return false;
 	}
 	return true;
+    int max = 20;
+    int min = 10;
+    double v = rand() % (max-min+1)+min;
+    double y = rand() % (21) -10 ;
+    hitValue = qMakePair(v, y);
+    detecting = 2;
+    return;
 }

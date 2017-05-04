@@ -22,10 +22,16 @@ public:
     QVector<double> colliding;
     void move();
     int stop;
+    int inPocket;
+    int fangui;
+    int switchuser;
 private:
     double getRad(double x, double y);
     double getAbs(double x);
     int coldStart;
+    int pocketZone();
+    int pocketCounter;
+    void resetWhiteBall();
 };
 
 #endif // BALL_H

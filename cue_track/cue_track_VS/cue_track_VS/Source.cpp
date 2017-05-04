@@ -13,44 +13,62 @@
 using namespace std;
 using namespace cv;
 
-vector<Point> detect_marker(Mat img, Scalar target, size_t n, int &number);
+vector<Point> detect_marker(Mat img, size_t n, int &number);
 vector<Point> predict_marker(vector<Point>, vector<Point>);
 bool filter(Point *start, Point *end, int m, int n, int Type);
-vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number, vector<Point> pre_vec);
+vector<Point> spiral_marker_detect(Mat img, size_t n, int number, vector<Point> pre_vec);
+int sim_detect_marker(unsigned char *data, int l, int &number);
 
 int main() {
 	VideoCapture capture;
-	Scalar_<uint8_t> tar;
 	if (!capture.open(1))
 		return 0;
-	// 读入一张图片（游戏原画）   
-	Mat target = imread("target.jpg");
 	Mat cam_img;
 	Mat cam;
-	Vec3b intensity = target.at<Vec3b>(10, 10);
-	tar.val[0] = intensity.val[0];
-	tar.val[1] = intensity.val[1];
-	tar.val[2] = intensity.val[2];
 	//int i = (int)(uchar)img.data + img.step[0] * 10 + img.step[1] * 10;
 	//int j = (int)i;
 	/*Mat convas = imread("convas.jpg");*/
 	namedWindow("Camera");
 	vector<Point> cur;
 	vector<Point> pre;
+	vector<Point> pre_corner;
+	vector<Point> cur_corner;
+	Mat red_hue_range;
+	Mat blue_hue_range;
 	while (1) {
 		capture >> cam;
-		GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
+		//GaussianBlur(cam, cam, cv::Size(9, 9), 2, 2);
+		cvtColor(cam, cam_img, CV_BGR2HSV);
+		//GaussianBlur(cam, cam_img, Size(5, 5), 0, 0);
 		//cam_img = imread("convas.jpg");
 		if (cam_img.empty()) break;
+		inRange(cam_img, cv::Scalar(110, 50, 50), cv::Scalar(130, 255, 255), blue_hue_range);
+		cur_corner = spiral_marker_detect(blue_hue_range, size_t(5), 1, pre_corner);
+		inRange(cam_img, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), red_hue_range);
+		//inRange(cam_img, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upper_red_hue_range);
+		//addWeighted(lower_red_hue_range, 1.0, upper_red_hue_range, 1.0, 0.0, red_hue_image);
 		//cur = detect_marker(cam_img, tar, size_t(20), 1);
-		cur = spiral_marker_detect(cam_img, tar, size_t(20), 1, pre);
+		cur = spiral_marker_detect(red_hue_range, size_t(5), 1, pre);
+		if (cur.size() != 0) {
+			if (cur_corner.size() != 0) {
+				cur[0].x -= cur_corner[0].x;
+				cur[0].y -= cur_corner[0].y;
+			}
+		}
 		//cur = predict_marker(pre, cur);
-		if (cur.size() != 0)
-			rectangle(cam_img, cur[0], Point(cur[0].x + 20, cur[0].y + 20), Scalar(0, 0, 0), 2);
- 		imshow("Camera", cam_img);
+		//addWeighted(lower_red_hue_range, 1.0, upper_red_hue_range, 1.0, 0.0, red_hue_image);
+		
+		//HoughCircles(red_hue_image, circles, CV_HOUGH_GRADIENT, 1, red_hue_image.rows / 8, 100, 20, 0, 0);
+
+		//
+		
+		//if (cur_corner.size() != 0) {
+			//rectangle(cam, cur_corner[0], Point(cur_corner[0].x + 20, cur_corner[0].y + 20), Scalar(0, 0, 0), 2);
+		//}
+ 		imshow("Camera", cam);
 		pre = cur;
+		pre_corner = cur_corner;
 		char c = cvWaitKey(50);
-		if (c == 27) break;
 	}
 	//namedWindow("目标");
 	//imshow("目标", img);
@@ -61,7 +79,7 @@ int main() {
 	//waitKey(6000);
 	return 0;
 }
-vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number, vector<Point> pre_vec) {
+vector<Point> spiral_marker_detect(Mat img, size_t n, int number, vector<Point> pre_vec) {
 	int counter = 1;
 	uchar tmp_R;
 	uchar tmp_G;
@@ -69,11 +87,11 @@ vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number,
 	vector<Point> res;
 	int accum = 2;
 	if (pre_vec.size() == 0) {
-		return detect_marker(img, target, n, number);
+		return detect_marker(img, n, number);
 	}
 	Point pre = pre_vec[0];
 	if ((pre.x > img.cols - 10) || (pre.x < 10) || (pre.y > img.rows - 10) || (pre.y < 10) )
-		return detect_marker(img, target, n, number);
+		return detect_marker(img, n, number);
 	Point top_start(pre.x, pre.y - 1);
 	Point top_end(top_start.x + 1, top_start.y);
 	Point right_start(top_end.x, top_end.y + 1);
@@ -86,12 +104,11 @@ vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number,
 	while (flag) {
 		flag = false;
 		if (filter(&top_start, &top_end, img.rows, img.cols, TOP)) {
-			Mat dist(img, Range(top_start.y, top_end.y + 1), Range(top_start.x, top_end.x + 1));
-			res = detect_marker(dist, target, n, number);
-			if (number == 0) {
-				res[0].x += top_start.x;
-				res[0].y = top_start.y;
-				return res;
+			//Mat dist(img, Range(top_start.y, top_end.y + 1), Range(top_start.x, top_end.x + 1));
+			int l = sim_detect_marker(img.data + (top_start.x + top_start.y * img.cols), top_end.x - top_start.x, number);
+			if (l != -1) {
+				res.push_back(Point(top_start.x + l, top_start.y));
+				//return res;
 			}
 			flag = true;
 			top_start.x--;
@@ -99,7 +116,7 @@ vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number,
 			top_end.x++;
 			top_end.y--;
 		}
-		if (filter(&right_start, &right_end, img.rows, img.cols, RIGHT)) {
+		/*if (filter(&right_start, &right_end, img.rows, img.cols, RIGHT)) {
 			Mat dist(img, Range(right_start.y, right_end.y + 1), Range(right_start.x, right_end.x + 1));
 			res = detect_marker(dist, target, n, number);
 			if (number == 0) {
@@ -112,14 +129,18 @@ vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number,
 			right_start.y--;
 			right_end.x++;
 			right_end.y++;
-		}
+		}*/
 		if (filter(&bottom_start, &bottom_end, img.rows, img.cols, BOTTOM)) {
-			Mat dist(img, Range(bottom_end.y, bottom_start.y + 1), Range(bottom_end.x, bottom_start.x + 1));
-			res = detect_marker(dist, target, n, number);
-			if (number == 0) {
-				res[0].x += bottom_end.x;
-				res[0].y = bottom_end.y;
-				return res;
+			//Mat dist(img, Range(bottom_end.y, bottom_start.y + 1), Range(bottom_end.x, bottom_start.x + 1));
+			int l = sim_detect_marker(img.data + (bottom_end.x + bottom_end.y * img.cols), bottom_start.x - bottom_start.x, number);
+			if (res.size() > 0) {
+				if (l != -1) {
+					Point tmp = res[0];
+					res.pop_back();
+					res.push_back(Point((bottom_end.x + l + tmp.x )/2, (bottom_end.y + tmp.y)/2));
+					return res;
+				}
+				res.pop_back();
 			}
 			flag = true;
 			bottom_start.x++;
@@ -127,7 +148,7 @@ vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number,
 			bottom_end.x--;
 			bottom_end.y++;
 		}
-		if (filter(&left_start, &left_end, img.rows, img.cols, LEFT)) {
+		/*if (filter(&left_start, &left_end, img.rows, img.cols, LEFT)) {
 			Mat dist(img, Range(left_end.y, left_start.y + 1), Range(left_end.x, left_start.x + 1));
 			res = detect_marker(dist, target, n, number);
 			if (number == 0) {
@@ -140,7 +161,7 @@ vector<Point> spiral_marker_detect(Mat img, Scalar target, size_t n, int number,
 			left_start.y++;
 			left_end.x--;
 			left_end.y--;
-		}
+		}*/
 	}
 	return res;
 }
@@ -176,7 +197,19 @@ bool filter(Point *start, Point *end, int m, int n, int Type){
 	}
 	return true;
 }
-vector<Point> detect_marker(Mat img, Scalar target, size_t n, int &number) {
+int sim_detect_marker(unsigned char *data, int l, int &number) {
+	int accum = 0;
+	for (int i = 0; i < l; i++) {
+		if (data[i] != 0)
+			accum++;
+		if (accum > 3) {
+			number--;
+			return i;
+		}
+	}
+	return -1;
+}
+vector<Point> detect_marker(Mat img, size_t n, int &number) {
 	uchar tmp_R;
 	uchar tmp_G;
 	uchar tmp_B;
@@ -184,7 +217,7 @@ vector<Point> detect_marker(Mat img, Scalar target, size_t n, int &number) {
 	int accum = 0;
 	for (int i = 0; i < img.rows; i++) {
 		for (int j = 0; j < img.cols; j++) {
-			Vec3b intensity = img.at<Vec3b>(i, j);
+			/*Vec3b intensity = img.at<Vec3b>(i, j);
 			tmp_B = (uchar)intensity.val[0];
 			tmp_G = (uchar)intensity.val[1];
 			tmp_R = (uchar)intensity.val[2];
@@ -195,9 +228,10 @@ vector<Point> detect_marker(Mat img, Scalar target, size_t n, int &number) {
 				if (accum > 0)
 					accum--;
 				continue;
-			}
-			accum++;
-			if (accum > 2) {
+			}*/
+			if (img.at<char>(i, j) != 0)
+				accum++;
+			if (accum > n) {
 				number--;
 				res.push_back(Point(j + n / 2, i + n / 2));
 			}

@@ -1,7 +1,6 @@
 #ifndef CUETRACK_H
 #define CUETRACK_H
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/opencv.hpp>
+
 #include <QPair>
 #include <vector>
 #include <QObject>
@@ -26,7 +25,6 @@ private:
     vector<Point> predict_marker(vector<Point> pre, vector<Point> cur);
 private slots:
     void timerHandler();
-
 };
 
 #endif // CUETRACK_H
